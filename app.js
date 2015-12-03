@@ -19,8 +19,8 @@ var deviceReady = $(function () {
     function sendRequest(dataString) {
         var obj = $.ajax({
             type: "POST",
-            url: "http://localhost/mobile_web/otw-server/OTW.php",
-            //url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/mobile_web_server/shop.php", //for web
+            //url: "http://localhost/mobile_web/otw-server/OTW.php",
+            url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
             data: dataString,
             async: false,
             cache: false
