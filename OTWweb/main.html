@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Adwadie | Main Page</title>
+    <!-- CSS files -->
+    <!--<link rel="stylesheet" href="src/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="src/css/materialize.min.css">
+    <link rel="stylesheet" href="src/css/custom.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="src/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Javascript files -->
+    <script src="src/js/jquery.min.js"></script>
+    <script src="src/js/bootstrap.min.js"></script>
+    <script src="src/js/materialize.min.js"></script>
+    <script src="cordova.js"></script>
+    <script src="app.js"></script>
+    <link rel="icon" href="src/img/logo.png">
+</head>
+
+<!-- Content -->
+
+<body onload="onLoad()">
+    <nav class="bg-color-dark-red">
+        <div class="nav-wrapper">
+            <span class="logo-brand">
+               <img src="src/img/logo.png" alt="logo">
+           </span>
+            <a href="#" class="brand-logo center">Off The Wall</a>
+        </div>
+    </nav>
+    <div class="col s12">
+        <ul class="tabs">
+            <li class="tab col s3 bg-color-red">
+                <i class="material-icons color-white">&#xE878;</i>
+                <a class="active color-white" href="#test1">Events</a>
+            </li>
+            <li class="tab col s3 bg-color-red">
+                <i class="material-icons color-white">&#xE87C;</i>
+                <a href="#test2" class="color-white">Friends</a>
+            </li>
+            <li class="tab col s3 bg-color-red">
+                <i class="material-icons color-white">&#xE8D1;</i>
+                <a href="#test3" class="color-white">Tickets</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div id="test1" class="col s12">
+            <div class="container">
+                <!-- list two --->
+                <ul class="collection with-header z-depth-1" id="listSection">
+            </div>
+        </div>
+        <div id="test2" class="col s12">
+            <div class="container">
+                <!-- list two --->
+                <ul class="collection with-header z-depth-1" id="listSection2">
+            </div>
+        </div>
+        <div id="test3" class="col s12">
+            <div class="container">
+                <!-- list two --->
+                <ul class="collection with-header z-depth-1" id="listSection3">
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Footer Actions for the mobile -->
+    <div class="action-btns">
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a class="btn-floating btn-large red">
+                <i class="fa fa-bars fa-5x"></i>
+            </a>
+            <ul>
+                <!-- Sync system -->
+                <li>
+                    <a class="btn-floating btn-large yellow darken-1 " id="sync">
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                </li>
+                <!-- Add a product -->
+                <li>
+                    <a class="btn-floating btn-large green  scan-complete-trigger" id="scan-btn-2">
+                        <i class="fa fa-5x">+</i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--/ Footer Actions for mobile -->
+
+
+
+
+
+    <div id="modal-view" class="modal">
+        <div class="modal-content">
+            <h4>View Product</h4>
+            <div class="row">
+                <div class="img-placeholder"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--/ A Function to Purchase an item -->
+
+
+    <!-- A modal that shows a receipt -->
+    <!-- Modal Structure -->
+    <div id="modal-receipt" class="modal">
+        <div class="modal-content">
+            <h4>Ticket Purchase <span id="t_id"></span></h4>
+            <p>Do you want to buy a ticket for this event <span id="amt_purchased"></span></p>
+            <p>Customers Phone Number <span id="phone_num"></span></p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes Buy Ticket</a>
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
+        </div>
+    </div>:
+
+
+
+</body>
+
+</html>

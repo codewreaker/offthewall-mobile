@@ -1,0 +1,90 @@
+
+html{
+    background-color: #f0f0f0;
+}
+
+
+.controls {
+    display: inline-block;
+
+}
+
+.controls a:nth-child(1){
+    margin-right: 10px;
+}
+
+.logo-brand img{
+    padding: 10px;
+    width: 60px;
+    height: auto;
+}
+
+#login_page, #signup_page{
+    margin-top: 5%;
+    height: 45em;
+}
+
+#login_page img {
+    display: block;
+    width: 200px;
+    height: auto;
+    margin: 0 auto;
+}
+
+#signup_page img{
+    display: block;
+    width: 100px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.tab i{
+    float: left;
+    position: relative;
+    top: 10px;
+    left: 100px;
+
+}
+
+.color-white{
+    color: #fff !important;
+}
+
+.color-yellow{
+    color: #ede82a !important;
+}
+
+.color-dark-red{
+    color: #962a29;
+}
+
+.color-red{
+    color: #ac1f23;
+}
+
+.bg-color-yellow{
+    background-color: #ede82a !important;
+}
+
+.bg-color-dark-red{
+    background-color: #962a29;
+}
+
+.bg-color-red{
+    background-color: #ac1f23;
+}
+
+.title{
+    font-weight: bolder;
+    color: #790003;
+}
+
+
+
+
+.img-placeholder img {
+    display: block;
+    margin: 0 auto;
+    height: 50em;
+    padding: 10px
+}
