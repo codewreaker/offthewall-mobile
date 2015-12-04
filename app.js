@@ -28,8 +28,6 @@ var deviceReady = $(function () {
             var $toastContent = $obj.message;
             if($obj.result==1){
                 Materialize.toast($toastContent, 3000);
-                alert("Fetch is called");
-                fetchJSON();
                 window.location.replace("main.html");
             }else{
                 Materialize.toast($toastContent, 3000);
@@ -240,7 +238,6 @@ var deviceReady = $(function () {
                 $obj = sendRequest(str);
                 var $toastContent = $obj.message;
                 Materialize.toast($toastContent, 3000);
-                fetchJSON();
             }
 
         });
@@ -270,7 +267,6 @@ var deviceReady = $(function () {
             Materialize.toast('Add a product here', 2000);
         }, // Callback for Modal open
         complete: function () {
-                fetchJSON();
             } // Callback for Modal close
     });
 
@@ -280,7 +276,6 @@ var deviceReady = $(function () {
             Materialize.toast('Save a purchase', 2000);
         }, // Callback for Modal open
         complete: function () {
-                fetchJSON();
             } // Callback for Modal close
     });
 
@@ -296,7 +291,6 @@ var deviceReady = $(function () {
                 Materialize.toast('Edit a product here', 2000);
             }, // Callback for Modal open
             complete: function () {
-                    fetchJSON();
                 } // Callback for Modal close
         });
 
@@ -326,8 +320,6 @@ var deviceReady = $(function () {
     login();
     //logout function
     logout();
-    //A function to fetch data from the DB
-    fetchJSON();
     //A function that populates the table
     syncSystem();
     //executes a barcode reader on phones
