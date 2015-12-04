@@ -29,11 +29,9 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `otw_persons_events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(20) NOT NULL,
-  `facebook_id` int(20) NOT NULL,
+  `facebook_id` int(20) NULL,
   `event_id` int(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id` (`user_id`),
-  UNIQUE KEY `event_id` (`event_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

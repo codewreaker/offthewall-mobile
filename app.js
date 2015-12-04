@@ -15,12 +15,52 @@ function onLoad() {
 
 var deviceReady = $(function () {
 
+    /**
+    * A function to login
+    ***/
+    var login = function(){
+        $("#login_btn").click(function(){
+            $username=$("#login_email").val();
+            $pword = $("#login_pword").val();
+            $str ="opt=0&username="+$username+"&pword="+$pword;
+            $obj = sendRequest($str);
+            var $toastContent = $obj.message;
+            if($obj.result==1){
+                Materialize.toast($toastContent, 3000);
+                window.location.replace("main.html");
+            }else{
+                Materialize.toast($toastContent, 3000);
+            }
+
+        });
+    }
+
+    /**
+    * A function to logout
+    ***/
+    var logout = function(){
+        $("#logout_btn").click(function(){
+            $obj = sendRequest("opt=8");
+            var $toastContent = $obj.message;
+            if($obj.result==1){
+                Materialize.toast($toastContent, 3000);
+                window.location.replace("login.html");
+            }else{
+                Materialize.toast($toastContent, 3000);
+            }
+
+        });
+    }
+
+
+
+
     //This function will be used to send an Ajax call to a database
     function sendRequest(dataString) {
         var obj = $.ajax({
             type: "POST",
-            //url: "http://localhost/mobile_web/otw-server/OTW.php",
-            url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
+            url: "http://localhost/mobile_web/otw-server/OTW.php",
+            //url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
             data: dataString,
             async: false,
             cache: false
@@ -44,7 +84,7 @@ var deviceReady = $(function () {
     }
 
     //An ajax call to delete a product from the database
-    var deleteProduct = function () {
+    var deleteEvent = function () {
         $("ul").on('click', 'li .delete-product', function () {
             var id = $(this).prop("id");
             var str = 'opt=3&event_id=' + id;
@@ -85,7 +125,7 @@ var deviceReady = $(function () {
     //An Ajax call to fetch data from server
     var fetchJSON = function () {
         // Part a populates listSection
-        $obj = sendRequest("opt=1");
+        $obj = sendRequest("opt=4");
         var $toastContent = $obj.message;
         Materialize.toast($toastContent, 3000);
         var data = $obj.data;
@@ -280,7 +320,11 @@ var deviceReady = $(function () {
 
 
 
-
+    //A function to login
+    login();
+    //logout function
+    logout();
+    //A function to fetch data from the DB
     fetchJSON();
     //A function that populates the table
     syncSystem();
@@ -288,8 +332,6 @@ var deviceReady = $(function () {
     barcode();
     //executes a save product function
     saveProduct();
-    //deletes a product based on the id
-    deleteProduct();
     //A function that allows the user to view the details of a clicked list
     viewDetails();
     //a function that starts a barcode reader and adds the event to your list of events
