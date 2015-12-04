@@ -14,6 +14,7 @@ function onLoad() {
 
 
 var deviceReady = $(function () {
+    var fetchJSON;
 
     /**
     * A function to login
@@ -27,6 +28,8 @@ var deviceReady = $(function () {
             var $toastContent = $obj.message;
             if($obj.result==1){
                 Materialize.toast($toastContent, 3000);
+                alert("Fetch is called");
+                fetchJSON();
                 window.location.replace("main.html");
             }else{
                 Materialize.toast($toastContent, 3000);
@@ -59,8 +62,8 @@ var deviceReady = $(function () {
     function sendRequest(dataString) {
         var obj = $.ajax({
             type: "POST",
-            url: "http://localhost/mobile_web/otw-server/OTW.php",
-            //url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
+            //url: "http://localhost/mobile_web/otw-server/OTW.php",
+            url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
             data: dataString,
             async: false,
             cache: false
@@ -91,7 +94,6 @@ var deviceReady = $(function () {
             $obj = sendRequest(str);
             var $toastContent = $obj.message;
             Materialize.toast($toastContent, 3000);
-            fetchJSON();
         });
 
     }
@@ -123,9 +125,9 @@ var deviceReady = $(function () {
 
 
     //An Ajax call to fetch data from server
-    var fetchJSON = function () {
+    fetchJSON = function () {
         // Part a populates listSection
-        $obj = sendRequest("opt=4");
+        $obj = sendRequest("opt=1");
         var $toastContent = $obj.message;
         Materialize.toast($toastContent, 3000);
         var data = $obj.data;
