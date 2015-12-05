@@ -17,39 +17,43 @@ var deviceReady = $(function () {
     var fetchJSON;
 
     /**
-    * A function to login
-    ***/
-    var login = function(){
-        $("#login_btn").click(function(){
-            $username=$("#login_email").val();
+     * A function to login
+     ***/
+    var login = function () {
+        $("#login_btn").click(function () {
+            $username = $("#login_email").val();
             $pword = $("#login_pword").val();
-            $str ="opt=0&username="+$username+"&pword="+$pword;
-            $obj = sendRequest($str);
-            var $toastContent = $obj.message;
-            if($obj.result==1){
-                Materialize.toast($toastContent, 3000);
-                window.location.replace("main.html");
-            }else{
-                Materialize.toast($toastContent, 3000);
-            }
+            $str = "opt=0&username=" + $username + "&pword=" + $pword;
+            sendRequest($str, function (data) {
+                $obj = $.parseJSON(data);
+                var $toastContent = $obj.message;
+                if ($obj.result == 1) {
+                    Materialize.toast($toastContent, 3000);
+                    window.location.replace("main.html");
+                } else {
+                    Materialize.toast($toastContent, 3000);
+                }
+            });
+
 
         });
     }
 
     /**
-    * A function to logout
-    ***/
-    var logout = function(){
-        $("#logout_btn").click(function(){
-            $obj = sendRequest("opt=8");
-            var $toastContent = $obj.message;
-            if($obj.result==1){
-                Materialize.toast($toastContent, 3000);
-                window.location.replace("login.html");
-            }else{
-                Materialize.toast($toastContent, 3000);
-            }
-
+     * A function to logout
+     ***/
+    var logout = function () {
+        $("#logout_btn").click(function () {
+            sendRequest("opt=8", function (data) {
+                $obj = $.parseJSON(data);
+                var $toastContent = $obj.message;
+                if ($obj.result == 1) {
+                    Materialize.toast($toastContent, 3000);
+                    window.location.replace("login.html");
+                } else {
+                    Materialize.toast($toastContent, 3000);
+                }
+            });
         });
     }
 
@@ -57,17 +61,18 @@ var deviceReady = $(function () {
 
 
     //This function will be used to send an Ajax call to a database
-    function sendRequest(dataString) {
-        var obj = $.ajax({
+    function sendRequest(dataString, callback) {
+        $.ajax({
             type: "POST",
-            //url: "http://localhost/mobile_web/otw-server/OTW.php",
-            url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
+            url: "http://localhost/mobile_web/otw-server/OTW.php",
+            //url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
             data: dataString,
-            async: false,
-            cache: false
+            async: true,
+            cache: false,
+            success: function (data) {
+                callback(data);
+            }
         });
-        var result = $.parseJSON(obj.responseText);
-        return result;
     }
 
     // An ajax call to save product
@@ -78,9 +83,10 @@ var deviceReady = $(function () {
             var c = $("#product_quant").val();
             var d = $("#event_id").val();
             var str = 'opt=1&event_name=' + a + '&event_rate=' + b + '&product_quant=' + c + '&event_id=' + d;
-            $obj = sendRequest(str);
-            var $toastContent = $obj.message;
-            Materialize.toast($toastContent, 3000);
+            sendRequest(str, function (data) {
+                var $toastContent = $obj.message;
+                Materialize.toast($toastContent, 3000);
+            });
         });
     }
 
@@ -89,9 +95,12 @@ var deviceReady = $(function () {
         $("ul").on('click', 'li .delete-product', function () {
             var id = $(this).prop("id");
             var str = 'opt=3&event_id=' + id;
-            $obj = sendRequest(str);
-            var $toastContent = $obj.message;
-            Materialize.toast($toastContent, 3000);
+            sendRequest(str, function (data) {
+                $obj = $.parseJSON(data);
+                var $toastContent = $obj.message;
+                Materialize.toast($toastContent, 3000);
+            });
+
         });
 
     }
@@ -102,7 +111,7 @@ var deviceReady = $(function () {
         // This part populates the form
 
         $("ul").on('click', 'li', function () {
-            $(".img-placeholder").html('<img src="'+$(this).find('img').attr('src')+'"/>');
+            $(".img-placeholder").html('<img src="' + $(this).find('img').attr('src') + '"/>');
             $("#modal-view h4").html($(this).find('span.title').html());
         });
 
@@ -113,9 +122,12 @@ var deviceReady = $(function () {
             var c = $("#product_quant_1").val();
             var d = $("#event_id_1").val();
             var str = 'opt=5&event_id=' + id + '&event_name=' + a + '&event_rate=' + b + '&product_quantity=' + c + '&event_id=' + d;
-            $obj = sendRequest(str);
-            var $toastContent = $obj.message;
-            Materialize.toast($toastContent, 3000);
+            sendRequest(str, function (data) {
+                $obj = $.parseJSON(data);
+                var $toastContent = $obj.message;
+                Materialize.toast($toastContent, 3000);
+            });
+
 
         });
 
@@ -124,49 +136,57 @@ var deviceReady = $(function () {
 
     //An Ajax call to fetch data from server
     fetchJSON = function () {
-        // Part a populates listSection
-        $obj = sendRequest("opt=1");
-        var $toastContent = $obj.message;
-        Materialize.toast($toastContent, 3000);
-        var data = $obj.data;
-        var top = '<li class="collection-header"><h4>Events</h4></li>';
-        var mid = "";
-        for (var i = 0; i < data.length; i++) {
-            mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,'+data[i].event_picture+'" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>' + data[i].event_desc +'</p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 delete-product" id="' + data[i].event_id + '"><i class="fa fa-2x fa-trash"></i></a></span></li>';
-        }
-        $("#listSection").html(top + mid);
+        $.when(
+            // Part a populates listSection
+            sendRequest("opt=1", function (data) {
+                $obj = $.parseJSON(data);
+                var $toastContent = $obj.message;
+                Materialize.toast($toastContent, 3000);
+                var data = $obj.data;
+                var top = '<li class="collection-header"><h4>Events</h4></li>';
+                var mid = "";
+                for (var i = 0; i < data.length; i++) {
+                    mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>' + data[i].event_desc + '</p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 delete-product" id="' + data[i].event_id + '"><i class="fa fa-2x fa-trash"></i></a></span></li>';
+                }
+                $("#listSection").html(top + mid)
+            }),
+
+            // Part B populates listsection2
+            sendRequest("opt=2", function (data) {
+                $obj = $.parseJSON(data);
+                var $toastContent = $obj.message;
+                Materialize.toast($toastContent, 3000);
+                var data = $obj.data;
+                var top = '<li class="collection-header"><h4>Friends</h4></li>';
+                var mid = "";
+                for (var i = 0; i < data.length; i++) {
+                    mid = mid + '<li class="collection-item avatar"><img src="src/img/logo.png" alt="" class="circle"><span class="title">' + data[i].email + '</span><p>' + data[i].user_telephone + '&nbsp </p><span class="controls secondary-content"></li>';
+                }
+                $("#listSection2").html(top + mid);
+            }),
+            // Part B populates listsection2
+            sendRequest("opt=3", function (data) {
+                $obj = $.parseJSON(data);
+                // Part C populates listsection3
+                var $toastContent = $obj.message;
+                Materialize.toast($toastContent, 3000);
+                var data = $obj.data;
+                var top = '<li class="collection-header"><h4>Tickets</h4></li>';
+                var mid = "";
+                for (var i = 0; i < data.length; i++) {
+                    mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>&cent;' + data[i].event_rate + '&nbsp </p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 view-receipt" href="#modal-receipt" id=' + data[i].event_id + '"><img src="src/img/logo.png" alt="" class="circle"><i class="fa fa-eye"></i></a></span></li>';
+                }
+                $("#listSection3").html(top + mid);
+
+                list_control(data);
+            }));
 
 
 
 
 
 
-        // Part B populates listsection2
-        $obj = sendRequest("opt=2");
-        var $toastContent = $obj.message;
-        Materialize.toast($toastContent, 3000);
-        var data = $obj.data;
-        var top = '<li class="collection-header"><h4>Friends</h4></li>';
-        var mid = "";
-        for (var i = 0; i < data.length; i++) {
-            mid = mid + '<li class="collection-item avatar"><img src="src/img/logo.png" alt="" class="circle"><span class="title">' + data[i].email+ '</span><p>' + data[i].user_telephone + '&nbsp </p><span class="controls secondary-content"></li>';
-        }
-        $("#listSection2").html(top + mid);
 
-
-        // Part C populates listsection3
-        $obj = sendRequest("opt=3");
-        var $toastContent = $obj.message;
-        Materialize.toast($toastContent, 3000);
-        var data = $obj.data;
-        var top = '<li class="collection-header"><h4>Tickets</h4></li>';
-        var mid = "";
-        for (var i = 0; i < data.length; i++) {
-            mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,'+data[i].event_picture+'" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>&cent;' + data[i].event_rate  + '&nbsp </p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 view-receipt" href="#modal-receipt" id='+data[i].event_id+'"><img src="src/img/logo.png" alt="" class="circle"><i class="fa fa-eye"></i></a></span></li>';
-        }
-        $("#listSection3").html(top + mid);
-
-        list_control(data);
 
 
     }
@@ -179,19 +199,19 @@ var deviceReady = $(function () {
         var currentQuantity;
         var barcode_id;
         $("#scan-btn-2").click(function () {
-//                        barcode_id = "354826";
-//                        $obj = sendRequest('opt=6&event_id=' + barcode_id);
-//                        alert($obj.data[0].event_id);
-//                        if ($obj.result == 0) {
-//                            alert("No Such Product");
-//                        } else {
-//                            id = $obj.data[0].event_id;
-//                            currentQuantity = $obj.data[0].product_quantity;
-//                            $("#event_name_2").val($obj.data[0].event_name);
-//                            $("#event_rate_2").val($obj.data[0].event_rate);
-//
-//                            $("#event_id_2").val($obj.data[0].event_id);
-//                        }
+            //                        barcode_id = "354826";
+            //                        $obj = sendRequest('opt=6&event_id=' + barcode_id);
+            //                        alert($obj.data[0].event_id);
+            //                        if ($obj.result == 0) {
+            //                            alert("No Such Product");
+            //                        } else {
+            //                            id = $obj.data[0].event_id;
+            //                            currentQuantity = $obj.data[0].product_quantity;
+            //                            $("#event_name_2").val($obj.data[0].event_name);
+            //                            $("#event_rate_2").val($obj.data[0].event_rate);
+            //
+            //                            $("#event_id_2").val($obj.data[0].event_id);
+            //                        }
             cordova.plugins.barcodeScanner.scan(
                 //check why its is alerting no such product when there is product
                 function (result) {
@@ -266,8 +286,7 @@ var deviceReady = $(function () {
         ready: function () {
             Materialize.toast('Add a product here', 2000);
         }, // Callback for Modal open
-        complete: function () {
-            } // Callback for Modal close
+        complete: function () {} // Callback for Modal close
     });
 
 
@@ -275,8 +294,7 @@ var deviceReady = $(function () {
         ready: function () {
             Materialize.toast('Save a purchase', 2000);
         }, // Callback for Modal open
-        complete: function () {
-            } // Callback for Modal close
+        complete: function () {} // Callback for Modal close
     });
 
 
@@ -290,26 +308,24 @@ var deviceReady = $(function () {
             ready: function () {
                 Materialize.toast('Edit a product here', 2000);
             }, // Callback for Modal open
-            complete: function () {
-                } // Callback for Modal close
+            complete: function () {} // Callback for Modal close
         });
 
 
 
         $(".view-receipt").leanModal({
-        ready: function () {
-            Materialize.toast('This is a receipt', 2000);
-        }, // Callback for Modal open
-        complete: function () {
-            } // Callback for Modal close
-    });
+            ready: function () {
+                Materialize.toast('This is a receipt', 2000);
+            }, // Callback for Modal open
+            complete: function () {} // Callback for Modal close
+        });
 
 
     }
 
 
-    var syncSystem = function(){
-        $("#sync").click(function(){
+    var syncSystem = function () {
+        $("#sync").click(function () {
             fetchJSON();
         });
     }
