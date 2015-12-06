@@ -74,8 +74,8 @@ var deviceReady = $(function () {
      * A function to login
      ***/
     var login = function () {
+
         $("#login_btn").click(function () {
-            alert("worked here");
             $username = $("#login_email").val();
             $pword = $("#login_pword").val();
             $str = "opt=0&username=" + $username + "&pword=" + $pword;
@@ -87,11 +87,9 @@ var deviceReady = $(function () {
                 async: false,
                 cache: false
             });
-            alert("worked here too");
             $obj = $.parseJSON(obj.responseText);
             var $toastContent = $obj.message;
             if ($obj.result == 1) {
-                alert("worked here three");
                 $json_string = {
                     "user_id": $obj.user_id,
                     "email": $obj.email
@@ -326,7 +324,7 @@ var deviceReady = $(function () {
         // this function triggers the modal at the bottom of the screen to add data
         $('.view-product').leanModal({
             ready: function () {
-                Materialize.toast('Edit a product here', 2000);
+                Materialize.toast('Poster View', 2000);
             }, // Callback for Modal open
             complete: function () {} // Callback for Modal close
         });
