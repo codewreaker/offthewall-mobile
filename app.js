@@ -163,17 +163,17 @@ var deviceReady = $(function () {
 
     //An ajax call to delete a product from the database
     var deleteEvent = function () {
-        alert("KI");
+
         $obj = JSON.parse(window.localStorage.getItem('credentials'));
         $myid = $obj.user_id;
         $("ul").on('click', 'li .delete-event', function () {
             var id = $(this).prop("id");
-            var str = 'opt=3&event_id=' + id+'&user_id='+$myid;
+            var str = 'opt=6&event_id=' + id+'&user_id='+$myid;
             sendRequest(str, function (data) {
                 $obj = $.parseJSON(data);
                 var $toastContent = $obj.message;
                 Materialize.toast($toastContent, 3000);
-                alert("")
+                fetchJSON();
             });
 
         });
@@ -361,9 +361,9 @@ var deviceReady = $(function () {
     //A function that allows the user to view the details of a clicked list
     viewDetails();
     //a function that starts a barcode reader and adds the event to your list of events
-    add_my_MyEvent();
+    addMyEvent();
     //A function to delete an event
-    delete_event();
+    deleteEvent();
 
 
 
