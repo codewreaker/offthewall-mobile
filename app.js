@@ -102,6 +102,7 @@ var deviceReady = $(function () {
             } else {
                 Materialize.toast($toastContent, 3000);
             }
+            fetchJSON();
         });
 
     }
@@ -162,6 +163,7 @@ var deviceReady = $(function () {
 
     //An ajax call to delete a product from the database
     var deleteEvent = function () {
+        alert("KI");
         $obj = JSON.parse(window.localStorage.getItem('credentials'));
         $myid = $obj.user_id;
         $("ul").on('click', 'li .delete-event', function () {
@@ -171,6 +173,7 @@ var deviceReady = $(function () {
                 $obj = $.parseJSON(data);
                 var $toastContent = $obj.message;
                 Materialize.toast($toastContent, 3000);
+                alert("")
             });
 
         });
@@ -345,7 +348,6 @@ var deviceReady = $(function () {
     }
 
 
-
     //A function to login
     login();
     //logout function
@@ -359,9 +361,9 @@ var deviceReady = $(function () {
     //A function that allows the user to view the details of a clicked list
     viewDetails();
     //a function that starts a barcode reader and adds the event to your list of events
-    addMyEvent();
+    add_my_MyEvent();
     //A function to delete an event
-    deleteEvent();
+    delete_event();
 
 
 
