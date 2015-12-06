@@ -135,8 +135,8 @@ var deviceReady = $(function () {
     function sendRequest(dataString, callback) {
         $.ajax({
             type: "POST",
-            url: "http://localhost/mobile_web/otw-server/OTW.php",
-            //url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
+            //url: "http://localhost/mobile_web/otw-server/OTW.php",
+            url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
             data: dataString,
             async: true,
             cache: false,
