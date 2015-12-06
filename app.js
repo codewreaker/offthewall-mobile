@@ -80,8 +80,8 @@ var deviceReady = $(function () {
             $str = "opt=0&username=" + $username + "&pword=" + $pword;
             var obj = $.ajax({
                 type: "POST",
-                url: "http://localhost/mobile_web/otw-server/OTW.php",
-                //url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
+                //url: "http://localhost/mobile_web/otw-server/OTW.php",
+                url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
                 data: $str,
                 async: false,
                 cache: false
