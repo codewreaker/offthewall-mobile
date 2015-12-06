@@ -75,6 +75,7 @@ var deviceReady = $(function () {
      ***/
     var login = function () {
         $("#login_btn").click(function () {
+            alert("worked here");
             $username = $("#login_email").val();
             $pword = $("#login_pword").val();
             $str = "opt=0&username=" + $username + "&pword=" + $pword;
@@ -86,9 +87,11 @@ var deviceReady = $(function () {
                 async: false,
                 cache: false
             });
+            alert("worked here too");
             $obj = $.parseJSON(obj.responseText);
             var $toastContent = $obj.message;
             if ($obj.result == 1) {
+                alert("worked here three");
                 $json_string = {
                     "user_id": $obj.user_id,
                     "email": $obj.email
