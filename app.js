@@ -22,8 +22,10 @@ var deviceReady = $(function () {
 
     //An Ajax call to fetch data from server
     fetchJSON = function () {
+            var user_general_id;
             $obj = JSON.parse(window.localStorage.getItem('credentials'));
             $str = "opt=4&user_id=" + $obj.user_id;
+            user_general_id = $obj.user_id;
             $.when(
                 // Part a populates listSection
                 sendRequest($str, function (data) {
@@ -59,7 +61,7 @@ var deviceReady = $(function () {
                     $("#listSection2").html(top + mid);
                 }),
                 // Part B populates listsection2
-                sendRequest("opt=3", function (data) {
+                sendRequest("opt=3&user_id="+user_general_id, function (data) {
                     $obj = $.parseJSON(data);
                     // Part C populates listsection3
                     var $toastContent = $obj.message;
@@ -69,9 +71,9 @@ var deviceReady = $(function () {
                     var mid = "";
                     for (var i = 0; i < data.length; i++) {
                         mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>&cent;' + data[i].event_rate + '&nbsp </p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 view-receipt" href="#modal-receipt" data-event="' + data[i].event_name + '"><img src="src/img/logo.png" alt="" class="circle"><i class="fa fa-eye"></i></a></span></li>';
-                        setEvent();
                     }
                     $("#listSection3").html(top + mid);
+                     setEvent();
                 })).done(function () {
                 Materialize.toast("Working...", 3000);
             });
@@ -88,7 +90,7 @@ var deviceReady = $(function () {
 
     //A private function that sets the current event
       setEvent = function () {
-       $('.view-receipt').click(function(){
+       $(document).on('click','.view-receipt',function(){
               eventName=$(this).attr('data-event');
               $("#event_val").html(eventName);
               $("#phone_num").html($.parseJSON(window.localStorage.getItem('credentials')).phone);
@@ -302,10 +304,10 @@ var deviceReady = $(function () {
     var purchaseTicket = function () {
         $('body').on('click', '#purchase_ticket', function () {
             $str = "opt=7&number=" + $.parseJSON(window.localStorage.getItem('credentials')).phone + "&event="+eventName;
-//            sendRequest($str, function (data) {
-//                var $toastContent = $.parseJSON(data).message;
-//                Materialize.toast($toastContent, 3000);
-//            });
+            sendRequest($str, function (data) {
+                var $toastContent = $.parseJSON(data).message;
+                Materialize.toast($toastContent, 3000);
+            });
         });
     }
 

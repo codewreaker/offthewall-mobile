@@ -15,6 +15,7 @@
         //Stroring credentials locally
         var localData = JSON.stringify($obj);
         window.localStorage.setItem('deviceData', localData);
+        window.location.replace("login.html");
     } else {
         // Checking if the user is already logged in
         if (window.localStorage.getItem('credentials') === null) {
