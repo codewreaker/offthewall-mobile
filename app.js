@@ -14,63 +14,86 @@ function onLoad() {
 
 
 var deviceReady = $(function () {
-    var fetchJSON
-
+    var fetchJSON;
+    var actionType;
+    var setEvent;
+    var eventName="";
 
 
     //An Ajax call to fetch data from server
     fetchJSON = function () {
-        $obj = JSON.parse(window.localStorage.getItem('credentials'));
-        $str = "opt=4&user_id=" + $obj.user_id;
-        $.when(
-            // Part a populates listSection
-            sendRequest($str, function (data) {
-                $obj = $.parseJSON(data);
-                var $toastContent = $obj.message;
-                Materialize.toast($toastContent, 3000);
-                var data = $obj.data;
-                var top = '<li class="collection-header"><h4>Events</h4></li>';
-                var mid = "";
-                for (var i = 0; i < data.length; i++) {
-                    mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>' + data[i].event_desc + '</p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 delete-event" id="' + data[i].event_id + '"><i class="fa fa-2x fa-trash"></i></a></span></li>';
-                }
-                Materialize.toast("Complete!!!", 3000);
-                $("#listSection").html(top + mid);
-                list_control();
-            }),
+            $obj = JSON.parse(window.localStorage.getItem('credentials'));
+            $str = "opt=4&user_id=" + $obj.user_id;
+            $.when(
+                // Part a populates listSection
+                sendRequest($str, function (data) {
+                    $obj = $.parseJSON(data);
+                    var $toastContent = $obj.message;
+                    Materialize.toast($toastContent, 3000);
+                    var data = $obj.data;
+                    var top = '<li class="collection-header"><h4>Events</h4></li>';
+                    var mid = "";
+                    for (var i = 0; i < data.length; i++) {
+                        mid = mid + '<li class="collection-item avatar events"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>' + data[i].event_desc + '</p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 delete-event" id="' + data[i].event_id + '"><i class="fa fa-2x fa-trash"></i></a></span></li>';
+                    }
+                    Materialize.toast("Complete!!!", 3000);
+                    $("#listSection").html(top + mid);
+                    list_control();
+                }),
 
-            // Part B populates listsection2
-            sendRequest("opt=2", function (data) {
-                $obj = $.parseJSON(data);
-                var $toastContent = $obj.message;
-                Materialize.toast($toastContent, 3000);
-                var data = $obj.data;
-                var top = '<li class="collection-header"><h4>Friends</h4></li>';
-                var mid = "";
-                for (var i = 0; i < data.length; i++) {
-                    mid = mid + '<li class="collection-item avatar"><a accesskey="5" target="_blank" href="tel:+' + data[i].user_telephone + '"><i class="fa fa-phone circle teal"></i></a><span class="title">' + data[i].email + '</span><p>+' + data[i].user_telephone + '&nbsp </p><span class="controls secondary-content"></li>';
-                }
-                $("#listSection2").html(top + mid);
-            }),
-            // Part B populates listsection2
-            sendRequest("opt=3", function (data) {
-                $obj = $.parseJSON(data);
-                // Part C populates listsection3
-                var $toastContent = $obj.message;
-                Materialize.toast($toastContent, 3000);
-                var data = $obj.data;
-                var top = '<li class="collection-header"><h4>Tickets</h4></li>';
-                var mid = "";
-                for (var i = 0; i < data.length; i++) {
-                    mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>&cent;' + data[i].event_rate + '&nbsp </p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 view-receipt" href="#modal-receipt" id=' + data[i].event_id + '"><img src="src/img/logo.png" alt="" class="circle"><i class="fa fa-eye"></i></a></span></li>';
-                }
-                $("#listSection3").html(top + mid);
-            })).done(function () {
-            Materialize.toast("Working...", 3000);
-        });
+                // Part B populates listsection2
+                sendRequest("opt=2", function (data) {
+                    var icon = "phone";
+                    $obj = $.parseJSON(data);
+                    var $toastContent = $obj.message;
+                    Materialize.toast($toastContent, 3000);
+                    var data = $obj.data;
+                    if ($.parseJSON(window.localStorage.getItem('deviceData')).result == 1) {
+                        icon = "envelope";
+                    }
+                    var top = '<li class="collection-header"><h4>Friends</h4></li>';
+                    var mid = "";
+                    for (var i = 0; i < data.length; i++) {
+                        mid = mid + '<li class="collection-item avatar"><a accesskey="5" href="' + actionType(data, i) + '"><i class="fa fa-' + icon + ' circle teal"></i></a><span class="title">' + data[i].email + '</span><p>+' + data[i].user_telephone + '&nbsp </p><span class="controls secondary-content"></li>';
+                    }
+                    $("#listSection2").html(top + mid);
+                }),
+                // Part B populates listsection2
+                sendRequest("opt=3", function (data) {
+                    $obj = $.parseJSON(data);
+                    // Part C populates listsection3
+                    var $toastContent = $obj.message;
+                    Materialize.toast($toastContent, 3000);
+                    var data = $obj.data;
+                    var top = '<li class="collection-header"><h4>Tickets</h4></li>';
+                    var mid = "";
+                    for (var i = 0; i < data.length; i++) {
+                        mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>&cent;' + data[i].event_rate + '&nbsp </p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 view-receipt" href="#modal-receipt" data-event="' + data[i].event_name + '"><img src="src/img/logo.png" alt="" class="circle"><i class="fa fa-eye"></i></a></span></li>';
+                    }
+                    $("#listSection3").html(top + mid);
+                    setEvent();
+                })).done(function () {
+                Materialize.toast("Working...", 3000);
+            });
 
+        }
+        //a private function to return a type of action
+    actionType = function (data, index) {
+        var val = 'tel:+' + data[index].user_telephone;
+        if ($.parseJSON(window.localStorage.getItem('deviceData')).result == 1) {
+            val = 'mailto:' + data[index].email;
+        }
+        return val;
     }
 
+    //A private function that sets the current event
+      setEvent = function () {
+       $("body").on('click','.view-receipt',function(){
+              eventName=$(this).attr('data-event');
+              $("#event_val").html(eventName);
+              $("#phone_num").html($.parseJSON(window.localStorage.getItem('credentials')).phone);
+          });
+    }
 
     /**
      * A function to login
@@ -93,20 +116,20 @@ var deviceReady = $(function () {
             if ($obj.result == 1) {
                 $json_string = {
                     "user_id": $obj.user_id,
-                    "email": $obj.email
+                    "email": $obj.phone,
+                    "phone":$obj.phone
                 };
                 //Setting the login variables locally
                 var localData = JSON.stringify($json_string);
                 window.localStorage.setItem('credentials', localData);
                 Materialize.toast($toastContent, 2000);
-
                 //Relocating to either web or phone view based on device
                 $object = JSON.parse(window.localStorage.getItem('deviceData'));
                 if ($object.result == 1) {
                     setTimeout(function () {
                         window.location.replace("main_web.html");
                     }, 2000);
-                //Relocating to mobile page
+                    //Relocating to mobile page
                 } else {
                     setTimeout(function () {
                         window.location.replace("main.html");
@@ -116,7 +139,6 @@ var deviceReady = $(function () {
             } else {
                 Materialize.toast($toastContent, 3000);
             }
-            fetchJSON();
         });
 
     }
@@ -131,7 +153,7 @@ var deviceReady = $(function () {
                 var $toastContent = $obj.message;
                 if ($obj.result == 1) {
                     Materialize.toast($toastContent, 3000);
-                    window.localStorage.clear();
+                    window.localStorage.removeItem("credentials");
                     setTimeout(function () {
                         window.location.replace("login.html");
                     }, 1000);
@@ -139,6 +161,14 @@ var deviceReady = $(function () {
                     Materialize.toast($toastContent, 3000);
                 }
             });
+        });
+    }
+
+    //A function to send sms
+    var sendSMS = function (message, number) {
+        $str = "opt=7&number=" + number + "&message=" + message;
+        sendRequest(str, function (data) {
+
         });
     }
 
@@ -177,18 +207,19 @@ var deviceReady = $(function () {
 
     //An ajax call to delete a product from the database
     var deleteEvent = function () {
-        $("ul").on('click', 'li .delete-event', function () {
-            $obj = JSON.parse(window.localStorage.getItem('credentials'));
-            $myid = $obj.user_id;
-            var id = $(this).prop("id");
-            var str = 'opt=6&event_id=' + id + '&user_id=' + $myid;
-            alert(str);
-            sendRequest(str, function (data) {
-                $obj = $.parseJSON(data);
-                var $toastContent = $obj.message;
-                Materialize.toast($toastContent, 3000);
-                fetchJSON();
+        $("ul").on('click', 'li.events', function () {
+            $('.delete-event').click(function () {
+                $obj = JSON.parse(window.localStorage.getItem('credentials'));
+                $myid = $obj.user_id;
+                var id = $(this).prop("id");
+                var str = 'opt=6&event_id=' + id + '&user_id=' + $myid;
+                sendRequest(str, function (data) {
+                    $obj = $.parseJSON(data);
+                    var $toastContent = $obj.message;
+                    Materialize.toast($toastContent, 3000);
+                });
             });
+            $(this).hide();
 
         });
 
@@ -265,36 +296,19 @@ var deviceReady = $(function () {
                 }
             );
         });
-
-        // a function to save the transaction
-        // This part executes the edit function
-        $("#purchase-product").click(function () {
-            var a = $("#event_name_2").val();
-            var b = $("#event_rate_2").val();
-            var c = $("#product_quant_2").val();
-            var d = $("#event_id_2").val();
-            var e = $("#customer_number").val();
-
-            // checking if the transaction can be made
-            if ((currentQuantity - c) < 0) {
-                alert("Cannot buy that many");
-            } else {
-                // updating data via opt 5
-                var str = 'opt=5&event_id=' + id + '&event_name=' + a + '&event_rate=' + b + '&product_quantity=' + (currentQuantity - c) + '&event_id=' + d;
-                $obj = sendRequest(str);
-
-                // Storing data information into transaction table
-                // updating data
-                var str = 'opt=7&event_id=' + id + '&product_quantity=' + c + '&customer_number=' + e;
-                $obj = sendRequest(str);
-                var $toastContent = $obj.message;
-                Materialize.toast($toastContent, 3000);
-            }
-
-        });
     }
 
 
+    var purchaseTicket = function () {
+        $('body').on('click', '#purchase_ticket', function () {
+            $str = "opt=7&number=" + $.parseJSON(window.localStorage.getItem('credentials')).phone + "&event="+eventName;
+            alert($str);
+            sendRequest($str, function (data) {
+                var $toastContent = $.parseJSON(data).message;
+                Materialize.toast($toastContent, 3000);
+            });
+        });
+    }
 
     //A function that triggers the barcode scanner to append to the edit form
     var barcode = function () {
@@ -346,7 +360,6 @@ var deviceReady = $(function () {
 
         $(".view-receipt").leanModal({
             ready: function () {
-                Materialize.toast('This is a receipt', 2000);
             }, // Callback for Modal open
             complete: function () {} // Callback for Modal close
         });
@@ -360,6 +373,7 @@ var deviceReady = $(function () {
             fetchJSON();
         });
     }
+
 
 
     //A function to login
@@ -378,6 +392,11 @@ var deviceReady = $(function () {
     addMyEvent();
     //A function to delete an event
     deleteEvent();
+    //A function called when a user decides to purchase a ticket
+    purchaseTicket();
+    //setEvent
+
+
 
 
 
