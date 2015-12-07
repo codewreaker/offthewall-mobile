@@ -34,6 +34,7 @@ var deviceReady = $(function () {
                 for (var i = 0; i < data.length; i++) {
                     mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>' + data[i].event_desc + '</p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 delete-event" id="' + data[i].event_id + '"><i class="fa fa-2x fa-trash"></i></a></span></li>';
                 }
+                Materialize.toast("Complete!!!", 3000);
                 $("#listSection").html(top + mid);
                 list_control();
             }),
@@ -47,7 +48,7 @@ var deviceReady = $(function () {
                 var top = '<li class="collection-header"><h4>Friends</h4></li>';
                 var mid = "";
                 for (var i = 0; i < data.length; i++) {
-                    mid = mid + '<li class="collection-item avatar"><img src="src/img/logo.png" alt="" class="circle"><span class="title">' + data[i].email + '</span><p>' + data[i].user_telephone + '&nbsp </p><span class="controls secondary-content"></li>';
+                    mid = mid + '<li class="collection-item avatar"><a accesskey="5" target="_blank" href="tel:+' + data[i].user_telephone + '"><i class="fa fa-phone circle teal"></i></a><span class="title">' + data[i].email + '</span><p>+' + data[i].user_telephone + '&nbsp </p><span class="controls secondary-content"></li>';
                 }
                 $("#listSection2").html(top + mid);
             }),
@@ -64,8 +65,9 @@ var deviceReady = $(function () {
                     mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>&cent;' + data[i].event_rate + '&nbsp </p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 view-receipt" href="#modal-receipt" id=' + data[i].event_id + '"><img src="src/img/logo.png" alt="" class="circle"><i class="fa fa-eye"></i></a></span></li>';
                 }
                 $("#listSection3").html(top + mid);
-
-            }));
+            })).done(function(){
+            Materialize.toast("Working...", 3000);
+        });
 
     }
 
@@ -74,7 +76,6 @@ var deviceReady = $(function () {
      * A function to login
      ***/
     var login = function () {
-
         $("#login_btn").click(function () {
             $username = $("#login_email").val();
             $pword = $("#login_pword").val();
@@ -136,8 +137,8 @@ var deviceReady = $(function () {
     function sendRequest(dataString, callback) {
         $.ajax({
             type: "POST",
-            //url: "http://localhost/mobile_web/otw-server/OTW.php",
-            url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
+            url: "http://localhost/mobile_web/otw-server/OTW.php",
+            //url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
             data: dataString,
             async: true,
             cache: false,
@@ -170,6 +171,7 @@ var deviceReady = $(function () {
         $("ul").on('click', 'li .delete-event', function () {
             var id = $(this).prop("id");
             var str = 'opt=6&event_id=' + id+'&user_id='+$myid;
+            alert(str);
             sendRequest(str, function (data) {
                 $obj = $.parseJSON(data);
                 var $toastContent = $obj.message;

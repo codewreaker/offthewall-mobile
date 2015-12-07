@@ -39,11 +39,7 @@ html{
 }
 
 .tab i{
-    float: left;
-    position: relative;
-    top: 10px;
-    left: 100px;
-
+    display: none;
 }
 
 .color-white{
