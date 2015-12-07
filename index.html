@@ -1,23 +1,31 @@
 <script src="src/js/jquery.min.js"></script>
 <script>
-    $.ajax({
-            type: "POST",
-            //url: "http://localhost/mobile_web/otw-server/OTW.php",
-            url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
-            data: "opt=10",
-            async: true,
-            cache: true,
-            success: function (data) {
-                $obj = $.parseJSON(data);
-                if($obj.result==1){
-                    window.location.replace("main_web.html");
-                }
-            }
-        });
-    // TODO main web must have it's own login page which relocates to main page web
-    if(window.localStorage.getItem('credentials')===null){
-             window.location.replace("login.html");
-        }else{
-             window.location.replace("main.html");
+    //Set device type properties
+    var obj = $.ajax({
+        type: "POST",
+        //url: "http://localhost/mobile_web/otw-server/OTW.php",
+        url: "http://cs.ashesi.edu.gh/~csashesi/class2016/prophet-agyeman-prempeh/otw-server/OTW.php", //for web
+        data: "opt=10",
+        async: false,
+        cache: true,
+    });
+
+    $obj = $.parseJSON(obj.responseText);
+    //Stroring credentials locally
+    var localData = JSON.stringify($obj);
+    window.localStorage.setItem('deviceData', localData);
+
+    // Checking if the user is already logged in
+    if (window.localStorage.getItem('credentials') === null) {
+        window.location.replace("login.html");
+    } else {
+        $obj = JSON.parse(window.localStorage.getItem('deviceData'));
+        // detecting if the device is a pc
+        if ($obj.result == 1) {
+            window.location.replace("main_web.html");
+        } else {
+            // detecting if the device is a phone
+            window.location.replace("main.html");
         }
+    }
 </script>

@@ -65,7 +65,7 @@ var deviceReady = $(function () {
                     mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>&cent;' + data[i].event_rate + '&nbsp </p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 view-receipt" href="#modal-receipt" id=' + data[i].event_id + '"><img src="src/img/logo.png" alt="" class="circle"><i class="fa fa-eye"></i></a></span></li>';
                 }
                 $("#listSection3").html(top + mid);
-            })).done(function(){
+            })).done(function () {
             Materialize.toast("Working...", 3000);
         });
 
@@ -95,12 +95,24 @@ var deviceReady = $(function () {
                     "user_id": $obj.user_id,
                     "email": $obj.email
                 };
+                //Setting the login variables locally
                 var localData = JSON.stringify($json_string);
                 window.localStorage.setItem('credentials', localData);
                 Materialize.toast($toastContent, 2000);
-                setTimeout(function () {
-                    window.location.replace("main.html");
-                }, 2000);
+
+                //Relocating to either web or phone view based on device
+                $object = JSON.parse(window.localStorage.getItem('deviceData'));
+                if ($object.result == 1) {
+                    setTimeout(function () {
+                        window.location.replace("main_web.html");
+                    }, 2000);
+                //Relocating to mobile page
+                } else {
+                    setTimeout(function () {
+                        window.location.replace("main.html");
+                    }, 2000);
+                }
+
             } else {
                 Materialize.toast($toastContent, 3000);
             }
@@ -165,12 +177,11 @@ var deviceReady = $(function () {
 
     //An ajax call to delete a product from the database
     var deleteEvent = function () {
-
-        $obj = JSON.parse(window.localStorage.getItem('credentials'));
-        $myid = $obj.user_id;
         $("ul").on('click', 'li .delete-event', function () {
+            $obj = JSON.parse(window.localStorage.getItem('credentials'));
+            $myid = $obj.user_id;
             var id = $(this).prop("id");
-            var str = 'opt=6&event_id=' + id+'&user_id='+$myid;
+            var str = 'opt=6&event_id=' + id + '&user_id=' + $myid;
             alert(str);
             sendRequest(str, function (data) {
                 $obj = $.parseJSON(data);
@@ -237,7 +248,7 @@ var deviceReady = $(function () {
                 //check why its is alerting no such product when there is product
                 function (result) {
                     $object = JSON.parse(window.localStorage.getItem('credentials'));
-                    $str = "opt=5&user_id="+ $object.user_id+"&barcode="+result.text;
+                    $str = "opt=5&user_id=" + $object.user_id + "&barcode=" + result.text;
                     sendRequest($str, function (data) {
                         $obj = $.parseJSON(data);
                         if ($obj.result == 0) {
