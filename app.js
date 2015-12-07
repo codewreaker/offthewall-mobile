@@ -69,9 +69,9 @@ var deviceReady = $(function () {
                     var mid = "";
                     for (var i = 0; i < data.length; i++) {
                         mid = mid + '<li class="collection-item avatar"><a class="lighten-2 view-product" href="#modal-view" id="' + data[i].event_id + '"><img src="data:image/jpeg;base64,' + data[i].event_picture + '" alt="" class="circle"/></a><span class="title">' + data[i].event_name + '</span><p>&cent;' + data[i].event_rate + '&nbsp </p><span class="controls secondary-content"><a class="btn-floating teal lighten-2 view-receipt" href="#modal-receipt" data-event="' + data[i].event_name + '"><img src="src/img/logo.png" alt="" class="circle"><i class="fa fa-eye"></i></a></span></li>';
+                        setEvent();
                     }
                     $("#listSection3").html(top + mid);
-                    setEvent();
                 })).done(function () {
                 Materialize.toast("Working...", 3000);
             });
@@ -88,7 +88,7 @@ var deviceReady = $(function () {
 
     //A private function that sets the current event
       setEvent = function () {
-       $("body").on('click','.view-receipt',function(){
+       $('.view-receipt').click(function(){
               eventName=$(this).attr('data-event');
               $("#event_val").html(eventName);
               $("#phone_num").html($.parseJSON(window.localStorage.getItem('credentials')).phone);
@@ -208,19 +208,19 @@ var deviceReady = $(function () {
     //An ajax call to delete a product from the database
     var deleteEvent = function () {
         $("ul").on('click', 'li.events', function () {
+            var _this=$(this);
             $('.delete-event').click(function () {
                 $obj = JSON.parse(window.localStorage.getItem('credentials'));
                 $myid = $obj.user_id;
                 var id = $(this).prop("id");
                 var str = 'opt=6&event_id=' + id + '&user_id=' + $myid;
+                $(this).closest('li').hide();
                 sendRequest(str, function (data) {
                     $obj = $.parseJSON(data);
                     var $toastContent = $obj.message;
                     Materialize.toast($toastContent, 3000);
                 });
             });
-            $(this).hide();
-
         });
 
     }
@@ -302,11 +302,10 @@ var deviceReady = $(function () {
     var purchaseTicket = function () {
         $('body').on('click', '#purchase_ticket', function () {
             $str = "opt=7&number=" + $.parseJSON(window.localStorage.getItem('credentials')).phone + "&event="+eventName;
-            alert($str);
-            sendRequest($str, function (data) {
-                var $toastContent = $.parseJSON(data).message;
-                Materialize.toast($toastContent, 3000);
-            });
+//            sendRequest($str, function (data) {
+//                var $toastContent = $.parseJSON(data).message;
+//                Materialize.toast($toastContent, 3000);
+//            });
         });
     }
 
